@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.defaultxyz.skyline.domain.db.entity.UserEntity
-import io.reactivex.Completable
 import io.reactivex.Single
 
 @Dao
@@ -15,8 +14,8 @@ interface UserDao {
     fun getUser(): Single<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(userEntity: UserEntity): Completable
+    fun insertUser(userEntity: UserEntity)
 
     @Query("DELETE FROM t_user")
-    fun clearUser(): Completable
+    fun clearUser()
 }
