@@ -1,6 +1,6 @@
 package com.defaultxyz.skyline.di
 
-import com.defaultxyz.skyline.presentation.MainActivity
+import com.defaultxyz.skyline.presentation.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
