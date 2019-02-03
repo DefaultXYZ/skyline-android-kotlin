@@ -1,18 +1,22 @@
 package com.defaultxyz.skyline.domain.db
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.defaultxyz.skyline.domain.db.entity.UserEntity
-import io.reactivex.Flowable
+import io.reactivex.Completable
+import io.reactivex.Single
 
 @Dao
 interface UserDao {
 
     @Query("SELECT * FROM t_user LIMIT 1")
-    fun getUser(): Flowable<UserEntity>
+    fun getUser(): Single<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(userEntity: UserEntity)
+    fun insertUser(userEntity: UserEntity): Completable
 
     @Query("DELETE FROM t_user")
-    fun clearUser()
+    fun clearUser(): Completable
 }

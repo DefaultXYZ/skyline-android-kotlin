@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.defaultxyz.skyline.domain.db.entity.LocationEntity
-import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface LocationDao {
@@ -14,8 +14,8 @@ interface LocationDao {
     fun insertAll(locations: List<LocationEntity>)
 
     @Query("SELECT * FROM t_location")
-    fun getAllLocations(): Flowable<List<LocationEntity>>
+    fun getAllLocations(): Single<List<LocationEntity>>
 
     @Query("SELECT * FROM t_location WHERE email = :email")
-    fun getAllLocationsByUserEmail(email: String): Flowable<List<LocationEntity>>
+    fun getAllLocationsByUserEmail(email: String): Single<List<LocationEntity>>
 }
