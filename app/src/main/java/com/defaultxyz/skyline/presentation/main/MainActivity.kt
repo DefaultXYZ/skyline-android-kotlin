@@ -1,10 +1,14 @@
 package com.defaultxyz.skyline.presentation.main
 
 import android.os.Bundle
-import android.widget.Toast
 import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.extensions.provideViewModel
+import com.defaultxyz.skyline.extensions.showToast
+import com.defaultxyz.skyline.extensions.startActivity
+import com.defaultxyz.skyline.presentation.login.LoginActivity
+import com.defaultxyz.skyline.presentation.map.MapActivity
 import com.defaultxyz.skyline.utils.BaseActivity
+import io.reactivex.rxkotlin.subscribeBy
 
 class MainActivity : BaseActivity() {
     private val viewModel by lazy { provideViewModel<MainViewModel>(factory) }
@@ -17,15 +21,14 @@ class MainActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.fetchUser()
-            .subscribe({
-                displayMessage("Welcome back, ${it.firstName}!")
-            }, {
-                displayMessage("Please login or sign up")
-            })
+            .subscribeBy(
+                onError = {
+                    startActivity<LoginActivity>(true)
+                },
+                onSuccess = {
+                    showToast("Welcome back, ${it.firstName}!")
+                    startActivity<MapActivity>(true)
+                })
             .addToDisposables()
-    }
-
-    private fun displayMessage(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 }
