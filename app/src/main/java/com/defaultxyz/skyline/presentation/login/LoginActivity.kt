@@ -2,6 +2,7 @@ package com.defaultxyz.skyline.presentation.login
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.defaultxyz.skyline.R
 
 class LoginActivity : AppCompatActivity() {
@@ -10,4 +11,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
     }
+
+    override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
 }
