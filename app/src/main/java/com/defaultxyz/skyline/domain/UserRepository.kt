@@ -4,6 +4,7 @@ import com.defaultxyz.skyline.domain.db.AppDatabase
 import com.defaultxyz.skyline.domain.db.entity.UserEntity
 import com.defaultxyz.skyline.domain.db.entity.toUser
 import com.defaultxyz.skyline.domain.model.User
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,5 +18,7 @@ class UserRepository @Inject constructor(
         database.userDao()
             .getUser()
             .map(UserEntity::toUser)
+
+    fun sendLoginRequest(email: String, password: String): Observable<User> = TODO()
 
 }

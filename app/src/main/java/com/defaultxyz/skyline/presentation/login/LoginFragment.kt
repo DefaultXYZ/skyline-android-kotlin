@@ -1,23 +1,44 @@
 package com.defaultxyz.skyline.presentation.login
 
-
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.defaultxyz.skyline.R
+import com.defaultxyz.skyline.databinding.FragmentLoginBinding
+import com.defaultxyz.skyline.extensions.provideViewModel
+import com.defaultxyz.skyline.extensions.showToast
+import com.defaultxyz.skyline.utils.BaseFragment
+import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.android.synthetic.main.fragment_login.*
 
-class LoginFragment : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+class LoginFragment : BaseFragment() {
+    private val viewModel by lazy { provideViewModel<LoginViewModel>(factory) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    ): View? = DataBindingUtil.inflate<FragmentLoginBinding>(
+        inflater, R.layout.fragment_login, container, false
+    ).apply {
+        viewModel = this@LoginFragment.viewModel
+    }.root
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        registrationButton.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
+        }
+        viewModel.loginStatus.subscribeBy(onError = {
+            context?.showToast("Enter data before login")
+        }, onNext = { isLoginSuccessful ->
+            when (isLoginSuccessful) {
+                true -> "Login successful"
+                else -> "Login failed"
+            }.also { context?.showToast(it) }
+        }).addToDisposables()
     }
 }
