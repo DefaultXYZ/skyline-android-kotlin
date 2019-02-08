@@ -7,9 +7,7 @@ import com.defaultxyz.skyline.domain.model.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class UserRepository @Inject constructor(
     private val database: AppDatabase
 ) {
