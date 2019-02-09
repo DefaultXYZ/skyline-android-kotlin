@@ -1,5 +1,6 @@
 package com.defaultxyz.skyline.domain.api
 
+import com.defaultxyz.skyline.domain.model.User
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -15,7 +16,7 @@ interface ApiClient {
     fun login(
         @Query("email") email: String,
         @Query("password") password: String
-    ): Observable<Response<Any>>
+    ): Observable<Response<User>>
 
     @GET("/location/all")
     fun getLocations(): Observable<Response<List<Any>>>

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.defaultxyz.skyline">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -12,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.login.LoginActivity"></activity>
+        <activity android:name=".presentation.login.LoginActivity" />
         <activity android:name=".presentation.map.MapActivity" />
         <activity android:name=".presentation.main.MainActivity">
             <intent-filter>

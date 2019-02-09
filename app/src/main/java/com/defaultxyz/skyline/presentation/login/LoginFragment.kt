@@ -1,18 +1,17 @@
 package com.defaultxyz.skyline.presentation.login
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.databinding.FragmentLoginBinding
 import com.defaultxyz.skyline.extensions.provideViewModel
 import com.defaultxyz.skyline.extensions.showToast
 import com.defaultxyz.skyline.utils.BaseFragment
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : BaseFragment() {
@@ -32,13 +31,11 @@ class LoginFragment : BaseFragment() {
         registrationButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
         }
-        viewModel.loginStatus.subscribeBy(onError = {
-            context?.showToast("Enter data before login")
-        }, onNext = { isLoginSuccessful ->
-            when (isLoginSuccessful) {
-                true -> "Login successful"
-                else -> "Login failed"
-            }.also { context?.showToast(it) }
-        }).addToDisposables()
+        viewModel.resultMessage.observe(this, Observer { result ->
+            when (result.data) {
+                LoginState.SUCCESS -> findNavController().navigate(R.id.action_loginFragment_to_mapActivity)
+                LoginState.FAILED, LoginState.EMPTY -> context?.showToast(result.info)
+            }
+        })
     }
 }

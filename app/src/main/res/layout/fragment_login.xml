@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:text="@={viewModel.email}" />
+                android:text="@={ viewModel.email }" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,7 +46,7 @@
                 android:layout_height="match_parent"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:text="@={viewModel.password}" />
+                android:text="@={ viewModel.password }" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

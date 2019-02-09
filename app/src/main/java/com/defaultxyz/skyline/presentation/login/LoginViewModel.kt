@@ -2,9 +2,12 @@ package com.defaultxyz.skyline.presentation.login
 
 import androidx.lifecycle.*
 import com.defaultxyz.skyline.domain.UserRepository
+import com.defaultxyz.skyline.extensions.doOnNull
+import com.defaultxyz.skyline.extensions.takeIfNotEmpty
+import com.defaultxyz.skyline.utils.ActionResult
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
@@ -14,22 +17,26 @@ class LoginViewModel @Inject constructor(
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
-    val loginStatus = PublishSubject.create<Boolean>()
+
+    val resultMessage = MutableLiveData<ActionResult<LoginState>>()
 
     fun onLoginAttempt() {
-        (email.value to password.value).also { (email, password) ->
-            if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-                loginStatus.onError(IllegalArgumentException())
-            } else {
+        (email.value to password.value)
+            .takeIfNotEmpty()
+            ?.let { (email, password) ->
                 userRepository.sendLoginRequest(email, password)
-                    .doOnError { loginStatus.onError(it) }
-                    .subscribe({ user ->
-                        loginStatus.onNext(user != null)
-                    }, {
-                        loginStatus.onError(it)
-                    }).addTo(compositeDisposable)
+                    .subscribeBy(
+                        onError = {
+                            resultMessage.postValue(ActionResult("Client error", LoginState.FAILED))
+                        }, onNext = {
+                            resultMessage.postValue(it)
+                        }
+                    ).addTo(compositeDisposable)
+            }.doOnNull {
+                ActionResult("Enter data before login", LoginState.EMPTY).apply {
+                    resultMessage.postValue(this)
+                }
             }
-        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
