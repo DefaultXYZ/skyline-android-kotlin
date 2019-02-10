@@ -5,19 +5,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.databinding.ActivityMapBinding
-import com.defaultxyz.skyline.domain.model.Location
-import com.defaultxyz.skyline.domain.model.latLng
+import com.defaultxyz.skyline.extensions.addMarkers
 import com.defaultxyz.skyline.extensions.provideViewModel
+import com.defaultxyz.skyline.extensions.toggleVisibility
 import com.defaultxyz.skyline.utils.BaseActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_map.*
 
 class MapActivity : BaseActivity(), OnMapReadyCallback {
     private val viewModel by lazy { provideViewModel<MapViewModel>(factory) }
 
-    private lateinit var map: GoogleMap
+    private var map: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,20 +27,54 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             setLifecycleOwner(this@MapActivity)
         }
         lifecycle.addObserver(viewModel)
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        viewModel.state.observe(this, Observer { it ->
+            it?.apply {
+                when (this) {
+                    MapState.LOCATIONS -> {
+                        addLocationButton.show()
+                        map?.setOnMapLongClickListener(null)
+                        map?.setOnMapClickListener {
+                            addLocationButton.toggleVisibility()
+                        }
+                        map?.addMarkers(viewModel.locations)
+                    }
+                    MapState.ADD_PLACE -> {
+                        addLocationButton.hide()
+                        confirmLocationButton.hide()
+                        map?.setOnMapClickListener(null)
+                        map?.setOnMapLongClickListener {
+                            viewModel.state.postValue(MapState.ADD_PLACE_CONFIRM)
+                            map?.clear()
+                            map?.addMarker(MarkerOptions().position(it))
+                        }
+                        map?.clear()
+                    }
+                    MapState.ADD_PLACE_CONFIRM -> {
+                        confirmLocationButton.show()
+                    }
+                }
+            }
+        })
+
+        addLocationButton.setOnClickListener {
+            viewModel.state.postValue(MapState.ADD_PLACE)
+        }
+
+        confirmLocationButton.setOnClickListener {
+
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-
-        viewModel.locations.observe(this, Observer { locations ->
-            locations.map { it.marker() }.forEach { map.addMarker(it) }
-        })
     }
 
-    private fun Location.marker() = MarkerOptions()
-        .position(latLng())
-        .title(name)
+    override fun onBackPressed() {
+        if (!viewModel.onBackPressed()) super.onBackPressed()
+    }
 }
