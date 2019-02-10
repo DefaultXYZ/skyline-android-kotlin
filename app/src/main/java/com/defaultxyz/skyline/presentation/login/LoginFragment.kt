@@ -29,6 +29,8 @@ class LoginFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.setTitle(R.string.login)
+
         registrationButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
         }

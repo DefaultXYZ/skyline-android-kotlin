@@ -28,6 +28,8 @@ class RegistrationFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.setTitle(R.string.registration)
+
         viewModel.resultMessage.observe(this, Observer { result ->
             when (result.data) {
                 LoginState.SUCCESS -> findNavController().navigate(R.id.action_registrationFragment_to_mapActivity)
