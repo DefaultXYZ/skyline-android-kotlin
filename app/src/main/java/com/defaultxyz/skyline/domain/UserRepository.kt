@@ -12,6 +12,7 @@ import com.defaultxyz.skyline.presentation.login.LoginState
 import com.defaultxyz.skyline.utils.ActionResult
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -20,7 +21,13 @@ class UserRepository @Inject constructor(
     private val apiClient: ApiClient
 ) {
 
-    fun isUserAuthorized(): Single<User> = userDao.getUser().map(UserEntity::toUser)
+    fun isUserAuthorized(): Single<ActionResult<User?>> = userDao.getUser()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .map(UserEntity::toUser)
+        .flatMap { user ->
+            Single.just(ActionResult<User?>(data = user))
+        }
 
     fun sendLoginRequest(email: String, password: String): Observable<ActionResult<LoginState>> =
         apiClient.login(email, password)
