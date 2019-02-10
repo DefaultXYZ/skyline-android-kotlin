@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/inputFirstName"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1"
             app:layout_constraintVertical_chainStyle="packed">
 
             <EditText
