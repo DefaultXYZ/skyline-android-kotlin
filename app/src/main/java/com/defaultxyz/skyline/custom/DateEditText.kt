@@ -24,6 +24,8 @@ class DateEditText @JvmOverloads constructor(
 ) : TextView(context, attrs, defStyleAttr), View.OnClickListener {
     private val calendar = Calendar.getInstance()
 
+    private var listener: OnDateChangeListener? = null
+
     var year: Int
         get() = calendar.get(Calendar.YEAR)
         set(value) = calendar.set(Calendar.YEAR, value)
@@ -53,12 +55,18 @@ class DateEditText @JvmOverloads constructor(
         this.year = year
         this.month = month
         this.day = day
+        listener?.onDateChanged(calendar.time)
         updateText()
     }
 
     fun setDate(date: Date) {
         calendar.time = date
+        listener?.onDateChanged(date)
         updateText()
+    }
+
+    fun setOnDateChangeListener(listener: OnDateChangeListener) {
+        this.listener = listener
     }
 
     private fun updateText() {
@@ -68,17 +76,28 @@ class DateEditText @JvmOverloads constructor(
     companion object {
 
         @JvmStatic
-        @BindingAdapter(value = ["date", "dateAttrChanged"], requireAll = false)
-        fun DateEditText.setDate(date: Date?, dateAttrChanged: InverseBindingListener?) {
-            date?.takeIf { this.calendar.time != date }?.let {
-                dateAttrChanged?.onChange()
-                setDate(date)
-            }
+        @BindingAdapter("date")
+        fun DateEditText.setDate(date: Date?) {
+            date?.takeIf { this.calendar.time != date }?.let { setDate(date) }
         }
 
         @JvmStatic
         @InverseBindingAdapter(attribute = "date", event = "dateAttrChanged")
         fun DateEditText.getDate(): Date = calendar.time
+
+        @JvmStatic
+        @BindingAdapter("dateAttrChanged")
+        fun DateEditText.setDateChangeListener(bindingListener: InverseBindingListener) {
+            setOnDateChangeListener(object : OnDateChangeListener {
+                override fun onDateChanged(date: Date) {
+                    bindingListener.onChange()
+                }
+            })
+        }
+    }
+
+    interface OnDateChangeListener {
+        fun onDateChanged(date: Date)
     }
 }
 

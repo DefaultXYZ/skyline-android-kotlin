@@ -1,7 +1,9 @@
 package com.defaultxyz.skyline.presentation.login
 
+import android.text.format.DateFormat
 import androidx.lifecycle.*
 import com.defaultxyz.skyline.domain.UserRepository
+import com.defaultxyz.skyline.domain.model.User
 import com.defaultxyz.skyline.extensions.doOnNull
 import com.defaultxyz.skyline.extensions.takeIfNotEmpty
 import com.defaultxyz.skyline.utils.ActionResult
@@ -38,14 +40,40 @@ class LoginViewModel @Inject constructor(
                         }
                     ).addTo(compositeDisposable)
             }.doOnNull {
-                ActionResult("Enter data before login", LoginState.EMPTY).apply {
-                    resultMessage.postValue(this)
-                }
+                resultMessage.postValue(ActionResult("Enter data before login", LoginState.EMPTY))
             }
     }
 
     fun onRegistrationAttempt() {
-
+        when {
+            email.value.isNullOrEmpty() -> "Email is required field"
+            password.value.isNullOrEmpty() -> "Password is required field"
+            password.value != confirmPassword.value -> "Passwords do not match"
+            else -> null
+        }?.let { message ->
+            resultMessage.postValue(ActionResult(message, LoginState.EMPTY))
+        }.doOnNull {
+            dateOfBirth.value.let { date ->
+                date?.let { DateFormat.format("yyyy-MM-dd", date) }?.toString().orEmpty()
+            }.let { date ->
+                User(
+                    email = email.value.orEmpty(),
+                    password = password.value.orEmpty(),
+                    firstName = firstName.value.orEmpty(),
+                    lastName = lastName.value.orEmpty(),
+                    dateOfBirth = date
+                )
+            }.let { user ->
+                userRepository.sendRegistrationRequest(user)
+                    .subscribeBy(
+                        onError = {
+                            resultMessage.postValue(ActionResult("Client error", LoginState.FAILED))
+                        }, onNext = {
+                            resultMessage.postValue(it)
+                        }
+                    ).addTo(compositeDisposable)
+            }
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
