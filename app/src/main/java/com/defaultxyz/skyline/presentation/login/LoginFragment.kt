@@ -24,6 +24,7 @@ class LoginFragment : BaseFragment() {
         inflater, R.layout.fragment_login, container, false
     ).apply {
         viewModel = this@LoginFragment.viewModel
+        setLifecycleOwner(this@LoginFragment)
     }.root
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

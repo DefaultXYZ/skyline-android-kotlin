@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.defaultxyz.skyline.di.annotation.ViewModelKey
 import com.defaultxyz.skyline.presentation.login.LoginViewModel
 import com.defaultxyz.skyline.presentation.main.MainViewModel
+import com.defaultxyz.skyline.presentation.map.MapViewModel
 import com.defaultxyz.skyline.utils.ViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -24,4 +25,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
     fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MapViewModel::class)
+    fun bindMapViewModel(viewModel: MapViewModel): ViewModel
 }

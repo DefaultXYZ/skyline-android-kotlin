@@ -10,7 +10,7 @@ import dagger.android.support.AndroidSupportInjectionModule
     modules = [
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        ActivityContributorModule::class,
+        DependencyContributorModule::class,
         ViewModelModule::class
     ]
 )
