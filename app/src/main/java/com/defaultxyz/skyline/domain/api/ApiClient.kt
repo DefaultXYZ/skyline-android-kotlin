@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface ApiClient {
 
     @POST("/user/register")
-    fun registerUser(): Observable<Response<Any>>
+    fun registerUser(@Body user: User): Observable<Response<User>>
 
     @GET("/user/login")
     fun login(

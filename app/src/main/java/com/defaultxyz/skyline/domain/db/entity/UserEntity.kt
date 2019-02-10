@@ -15,4 +15,14 @@ data class UserEntity(
     @ColumnInfo(name = "date_of_birth") val dateOfBirth: String
 )
 
-fun UserEntity.toUser() = User(email, firstName, lastName)
+fun UserEntity.toUser() = User(
+    email, password, firstName, lastName, dateOfBirth
+)
+
+fun User.toEntity() = UserEntity(
+    email = email,
+    password = password,
+    firstName = firstName,
+    lastName = lastName,
+    dateOfBirth = dateOfBirth
+)

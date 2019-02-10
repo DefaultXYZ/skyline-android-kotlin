@@ -21,6 +21,12 @@ class AppModule {
     fun providesDatabase(context: Context) = AppDatabase.getInstance(context)
 
     @Provides
+    fun providesUserDao(database: AppDatabase) = database.userDao()
+
+    @Provides
+    fun providesLocationDao(database: AppDatabase) = database.locationDao()
+
+    @Provides
     fun providesApiClient(context: Context): ApiClient = Retrofit.Builder()
         .baseUrl(context.getString(R.string.url))
         .addConverterFactory(GsonConverterFactory.create())
