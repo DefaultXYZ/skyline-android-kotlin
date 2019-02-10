@@ -1,6 +1,7 @@
 package com.defaultxyz.skyline.di
 
 import com.defaultxyz.skyline.presentation.login.LoginFragment
+import com.defaultxyz.skyline.presentation.login.RegistrationFragment
 import com.defaultxyz.skyline.presentation.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -13,4 +14,7 @@ interface ActivityContributorModule {
 
     @ContributesAndroidInjector
     fun bindsLoginFragment(): LoginFragment
+
+    @ContributesAndroidInjector
+    fun bindsRegistrationFragment(): RegistrationFragment
 }

@@ -8,6 +8,7 @@ import com.defaultxyz.skyline.utils.ActionResult
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import java.util.*
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
@@ -17,6 +18,10 @@ class LoginViewModel @Inject constructor(
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
+    val firstName = MutableLiveData<String>()
+    val lastName = MutableLiveData<String>()
+    val dateOfBirth = MutableLiveData<Date>()
+    val confirmPassword = MutableLiveData<String>()
 
     val resultMessage = MutableLiveData<ActionResult<LoginState>>()
 
@@ -37,6 +42,10 @@ class LoginViewModel @Inject constructor(
                     resultMessage.postValue(this)
                 }
             }
+    }
+
+    fun onRegistrationAttempt() {
+
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
