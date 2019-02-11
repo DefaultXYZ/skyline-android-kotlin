@@ -14,6 +14,11 @@ class MapViewModel @Inject constructor(
 ) : ViewModel(), LifecycleObserver {
     private val compositeDisposable = CompositeDisposable()
 
+    val placeName = MutableLiveData<String>()
+    val placeReview = MutableLiveData<String>()
+
+    val locationReviews = MutableLiveData<List<Any>>()
+
     val state = MutableLiveData<MapState>()
     val locations = mutableListOf<Location>()
 
@@ -41,6 +46,14 @@ class MapViewModel @Inject constructor(
             }
         }
     }.or(false)
+
+    fun onAddLocation() {
+
+    }
+
+    fun onAddReview() {
+
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {

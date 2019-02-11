@@ -2,7 +2,9 @@ package com.defaultxyz.skyline.utils
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import com.defaultxyz.skyline.R
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -15,9 +17,14 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
 
+    private val toolbar: Toolbar? by lazy {
+        findViewById<Toolbar>(R.id.toolbar)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
+        toolbar?.apply { setSupportActionBar(this) }
     }
 
     override fun onDestroy() {

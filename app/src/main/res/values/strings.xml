@@ -11,4 +11,11 @@
     <string name="date_of_birth">Date Of Birth</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="date_format">DD/MM/YYYY</string>
+    <string name="review">Review</string>
+    <string name="place_name">Place name</string>
+    <string name="confirm">Confirm</string>
+    <string name="location_details">Location Details</string>
+    <string name="add_location">Add Location</string>
+    <string name="send">Send</string>
+    <string name="leave_your_review">Leave your review</string>
 </resources>

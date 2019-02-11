@@ -1,17 +1,15 @@
 package com.defaultxyz.skyline.presentation.login
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.defaultxyz.skyline.R
-import kotlinx.android.synthetic.main.layout_toolbar.*
+import com.defaultxyz.skyline.utils.BaseActivity
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        setSupportActionBar(toolbar)
     }
 
     override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
