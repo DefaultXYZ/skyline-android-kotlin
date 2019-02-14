@@ -37,11 +37,33 @@
             android:layout_margin="16dp"
             android:text="@={ viewModel.locationCreator }"
             android:textAlignment="viewEnd"
-            app:layout_constraintBottom_toTopOf="@id/reviewList"
+            app:layout_constraintBottom_toTopOf="@id/totalRatingBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/locationCreatorLabel"
             app:layout_constraintTop_toBottomOf="@id/screenToolbar"
             tools:text="Yevhenii" />
+
+        <TextView
+            android:id="@+id/totalRatingLabel"
+            style="@style/AppText.Large.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_rating"
+            app:layout_constraintBottom_toBottomOf="@id/totalRatingBar"
+            app:layout_constraintEnd_toStartOf="@id/totalRatingBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/totalRatingBar" />
+
+        <RatingBar
+            android:id="@+id/totalRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stepSize="0.1"
+            app:layout_constraintBottom_toTopOf="@id/reviewList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/totalRatingLabel"
+            app:layout_constraintTop_toBottomOf="@id/locationCreator"
+            tools:rating="3.7" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reviewList"
@@ -51,7 +73,7 @@
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/addReviewButton"
-            app:layout_constraintTop_toBottomOf="@id/locationCreator"
+            app:layout_constraintTop_toBottomOf="@id/totalRatingBar"
             tools:listitem="@layout/layout_review_item" />
 
         <EditText

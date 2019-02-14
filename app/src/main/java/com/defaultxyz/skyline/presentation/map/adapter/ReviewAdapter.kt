@@ -47,5 +47,5 @@ data class ReviewItem(
     val name: String,
     val body: String
 ) {
-    constructor(review: Review) : this(review.userEmail, review.text)
+    constructor(review: Review) : this(review.userName, review.text)
 }

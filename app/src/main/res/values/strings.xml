@@ -19,4 +19,5 @@
     <string name="send">Send</string>
     <string name="leave_your_review">Leave your review</string>
     <string name="location_created_by">Location created by</string>
+    <string name="total_rating">Total rating</string>
 </resources>
