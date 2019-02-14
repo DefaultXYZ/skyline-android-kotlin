@@ -5,8 +5,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.databinding.ActivityMapBinding
+import com.defaultxyz.skyline.domain.model.Location
 import com.defaultxyz.skyline.extensions.addMarkers
 import com.defaultxyz.skyline.extensions.provideViewModel
+import com.defaultxyz.skyline.extensions.startActivity
 import com.defaultxyz.skyline.extensions.toggleVisibility
 import com.defaultxyz.skyline.utils.BaseActivity
 import com.google.android.gms.maps.GoogleMap
@@ -38,8 +40,15 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                     MapState.LOCATIONS -> {
                         addLocationButton.show()
                         map?.setOnMapLongClickListener(null)
-                        map?.setOnMapClickListener {
+                        map?.setOnInfoWindowClickListener {
                             addLocationButton.toggleVisibility()
+                        }
+                        map?.setOnInfoWindowClickListener {
+                            (it.tag as? Location)?.also { location ->
+                                startActivity<LocationDetailsActivity> {
+                                    putExtra(LOCATION_KEY, location)
+                                }
+                            }
                         }
                         map?.addMarkers(viewModel.locations)
                     }
@@ -66,7 +75,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         confirmLocationButton.setOnClickListener {
-
+            startActivity<AddLocationActivity>()
         }
     }
 

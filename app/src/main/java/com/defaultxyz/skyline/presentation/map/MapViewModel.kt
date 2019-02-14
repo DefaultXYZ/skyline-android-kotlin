@@ -3,6 +3,7 @@ package com.defaultxyz.skyline.presentation.map
 import androidx.lifecycle.*
 import com.defaultxyz.skyline.domain.LocationRepository
 import com.defaultxyz.skyline.domain.model.Location
+import com.defaultxyz.skyline.domain.model.Review
 import com.defaultxyz.skyline.extensions.or
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -16,8 +17,10 @@ class MapViewModel @Inject constructor(
 
     val placeName = MutableLiveData<String>()
     val placeReview = MutableLiveData<String>()
+    val placeRating = MutableLiveData<Int>()
 
-    val locationReviews = MutableLiveData<List<Any>>()
+    val locationCreator = MutableLiveData<String>()
+    val locationReviews = MutableLiveData<List<Review>>()
 
     val state = MutableLiveData<MapState>()
     val locations = mutableListOf<Location>()

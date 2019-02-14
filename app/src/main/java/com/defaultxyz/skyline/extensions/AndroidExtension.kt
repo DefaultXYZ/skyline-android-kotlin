@@ -21,11 +21,14 @@ inline fun <reified T : ViewModel> AppCompatActivity.provideViewModel(factory: V
 inline fun <reified T : ViewModel> Fragment.provideViewModel(factory: ViewModelProvider.Factory): T =
     ViewModelProviders.of(this, factory).get(T::class.java)
 
-inline fun <reified T : Activity> Activity.startActivity(shouldFinishCurrent: Boolean = false) =
-    Intent(this, T::class.java).apply {
-        startActivity(this)
-        if (shouldFinishCurrent) finish()
-    }
+inline fun <reified T : Activity> Activity.startActivity(
+    shouldFinishCurrent: Boolean = false,
+    noinline options: (Intent.() -> Unit)? = null
+) = Intent(this, T::class.java).apply {
+    options?.invoke(this)
+    startActivity(this)
+    if (shouldFinishCurrent) finish()
+}
 
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
@@ -36,7 +39,11 @@ fun FloatingActionButton.toggleVisibility() {
 }
 
 fun GoogleMap.addMarkers(locations: List<Location>) {
-    locations.map { it.marker() }.forEach { addMarker(it) }
+    locations.forEach { location ->
+        location.marker().apply {
+            addMarker(this).tag = location
+        }
+    }
 }
 
 private fun Location.marker() = MarkerOptions()

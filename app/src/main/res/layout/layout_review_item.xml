@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data />
+    <data>
+
+        <variable
+            name="item"
+            type="com.defaultxyz.skyline.presentation.map.adapter.ReviewItem" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,17 +17,21 @@
 
         <TextView
             android:id="@+id/userTitle"
+            style="@style/AppText.Large.Bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
+            android:text="@{ item.name }"
             app:layout_constraintBottom_toTopOf="@id/userReview"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="User 1" />
 
         <TextView
             android:id="@+id/userReview"
+            style="@style/AppText.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{ item.body }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/userTitle"
             tools:text="This place is quite good" />
