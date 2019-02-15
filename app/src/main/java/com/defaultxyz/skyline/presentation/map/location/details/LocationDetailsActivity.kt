@@ -33,6 +33,7 @@ class LocationDetailsActivity : BaseActivity() {
 
         intent.getParcelableExtra<Location>(LOCATION_KEY).apply {
             viewModel.locationCreator.postValue(userName)
+            viewModel.loadReviews(this)
         }
 
         reviewList.adapter = adapter
