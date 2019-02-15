@@ -1,6 +1,8 @@
 package com.defaultxyz.skyline.presentation.map
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
 import com.defaultxyz.skyline.domain.LocationRepository
 import com.defaultxyz.skyline.domain.model.Location
 import com.defaultxyz.skyline.extensions.or
@@ -10,20 +12,23 @@ import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 class MapViewModel @Inject constructor(
-    locationRepository: LocationRepository
+    private val locationRepository: LocationRepository
 ) : BaseViewModel() {
     val state = MutableLiveData<MapState>()
-    val locations = mutableListOf<Location>()
-
     var addLocationLatLng: LatLng? = null
 
+    val locations = MutableLiveData<List<Location>>()
+
     init {
+        state.postValue(MapState.LOCATIONS)
+    }
+
+    fun loadLocations() {
         locationRepository.retrieveLocations()
             .subscribeBy(onError = {
                 it.printStackTrace()
             }, onNext = {
-                locations.addAll(it)
-                state.postValue(MapState.LOCATIONS)
+                locations.postValue(it)
             }).toDisposables()
     }
 
@@ -40,4 +45,9 @@ class MapViewModel @Inject constructor(
             }
         }
     }.or(false)
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onPause() {
+        compositeDisposable.clear()
+    }
 }

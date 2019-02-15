@@ -7,8 +7,8 @@ import com.defaultxyz.skyline.domain.db.UserDao
 import com.defaultxyz.skyline.domain.db.entity.toEntity
 import com.defaultxyz.skyline.domain.model.Location
 import com.defaultxyz.skyline.domain.model.Review
+import com.defaultxyz.skyline.utils.ActionResult
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -26,10 +26,10 @@ class LocationRepository @Inject constructor(
                 }.orEmpty()
             }
 
-    fun addLocation(location: Location, review: Review): Disposable =
+    fun addLocation(location: Location, review: Review): Observable<ActionResult<Location?>> =
         userDao.getUser()
             .subscribeOn(Schedulers.io())
-            .subscribe { entity ->
+            .flatMapObservable { entity ->
                 apiClient.addLocation(entity.email, AddLocationModel(location, review))
-            }
+            }.map { ActionResult(it.message, it.data) }
 }

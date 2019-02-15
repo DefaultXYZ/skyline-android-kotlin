@@ -6,10 +6,7 @@ import androidx.lifecycle.Observer
 import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.databinding.ActivityMapBinding
 import com.defaultxyz.skyline.domain.model.Location
-import com.defaultxyz.skyline.extensions.addMarkers
-import com.defaultxyz.skyline.extensions.provideViewModel
-import com.defaultxyz.skyline.extensions.startActivity
-import com.defaultxyz.skyline.extensions.toggleVisibility
+import com.defaultxyz.skyline.extensions.*
 import com.defaultxyz.skyline.presentation.map.location.add.AddLocationActivity
 import com.defaultxyz.skyline.presentation.map.location.add.NEW_LOCATION_LAT_LNG_KEY
 import com.defaultxyz.skyline.presentation.map.location.details.LOCATION_KEY
@@ -38,8 +35,8 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        viewModel.state.observe(this, Observer { it ->
-            it?.apply {
+        viewModel.state.observe(this, Observer { state ->
+            state?.apply {
                 when (this) {
                     MapState.LOCATIONS -> {
                         addLocationButton.show()
@@ -54,7 +51,9 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                                 }
                             }
                         }
-                        map?.addMarkers(viewModel.locations)
+                        viewModel.locations.value?.let {
+                            map?.addMarkers(it)
+                        }
                     }
                     MapState.ADD_PLACE -> {
                         addLocationButton.hide()
@@ -76,15 +75,28 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             }
         })
 
+        viewModel.locations.observe(this, Observer {
+            if (viewModel.state.value == MapState.LOCATIONS) {
+                map?.addMarkers(it)
+            }
+        })
+
         addLocationButton.setOnClickListener {
+            showToast("Choose location to add")
             viewModel.state.postValue(MapState.ADD_PLACE)
         }
 
         confirmLocationButton.setOnClickListener {
-            startActivity<AddLocationActivity>{
+            startActivity<AddLocationActivity> {
                 putExtra(NEW_LOCATION_LAT_LNG_KEY, viewModel.addLocationLatLng)
             }
+            viewModel.state.postValue(MapState.LOCATIONS)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadLocations()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

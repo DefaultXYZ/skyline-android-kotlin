@@ -2,9 +2,11 @@ package com.defaultxyz.skyline.presentation.map.location.add
 
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.databinding.ActivityAddLocationBinding
 import com.defaultxyz.skyline.extensions.provideViewModel
+import com.defaultxyz.skyline.extensions.showToast
 import com.defaultxyz.skyline.utils.BaseActivity
 import com.google.android.gms.maps.model.LatLng
 
@@ -26,9 +28,16 @@ class AddLocationActivity : BaseActivity() {
         setTitle(R.string.add_location)
 
         intent.getParcelableExtra<LatLng>(NEW_LOCATION_LAT_LNG_KEY)
-            .let { it.latitude to it.longitude }
+            .destruct()
             .let {
                 viewModel.placeLocation.postValue(it)
             }
+
+        viewModel.result.observe(this, Observer {
+            showToast(it.info)
+            it.data?.let { finish() }
+        })
     }
+
+    private fun LatLng.destruct(): Pair<Double, Double> = Pair(latitude, longitude)
 }

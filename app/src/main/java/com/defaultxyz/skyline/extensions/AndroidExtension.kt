@@ -39,6 +39,7 @@ fun FloatingActionButton.toggleVisibility() {
 }
 
 fun GoogleMap.addMarkers(locations: List<Location>) {
+    clear()
     locations.forEach { location ->
         location.marker().apply {
             addMarker(this).tag = location
