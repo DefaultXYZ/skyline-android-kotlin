@@ -1,29 +1,21 @@
 package com.defaultxyz.skyline.presentation.map
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
 import com.defaultxyz.skyline.domain.LocationRepository
 import com.defaultxyz.skyline.domain.model.Location
-import com.defaultxyz.skyline.domain.model.Review
 import com.defaultxyz.skyline.extensions.or
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import com.defaultxyz.skyline.utils.BaseViewModel
+import com.google.android.gms.maps.model.LatLng
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 class MapViewModel @Inject constructor(
-    private val locationRepository: LocationRepository
-) : ViewModel(), LifecycleObserver {
-    private val compositeDisposable = CompositeDisposable()
-
-    val placeName = MutableLiveData<String>()
-    val placeReview = MutableLiveData<String>()
-    val placeRating = MutableLiveData<Int>()
-
-    val locationCreator = MutableLiveData<String>()
-    val locationReviews = MutableLiveData<List<Review>>()
-
+    locationRepository: LocationRepository
+) : BaseViewModel() {
     val state = MutableLiveData<MapState>()
     val locations = mutableListOf<Location>()
+
+    var addLocationLatLng: LatLng? = null
 
     init {
         locationRepository.retrieveLocations()
@@ -32,8 +24,7 @@ class MapViewModel @Inject constructor(
             }, onNext = {
                 locations.addAll(it)
                 state.postValue(MapState.LOCATIONS)
-            })
-            .addTo(compositeDisposable)
+            }).toDisposables()
     }
 
     fun onBackPressed() = state.value?.let { state ->
@@ -49,18 +40,4 @@ class MapViewModel @Inject constructor(
             }
         }
     }.or(false)
-
-    fun onAddLocation() {
-
-    }
-
-    fun onAddReview() {
-
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        compositeDisposable.clear()
-    }
-
 }

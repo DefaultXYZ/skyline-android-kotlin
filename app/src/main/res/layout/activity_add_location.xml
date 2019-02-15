@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.defaultxyz.skyline.presentation.map.MapViewModel" />
+            type="com.defaultxyz.skyline.presentation.map.location.add.AddLocationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

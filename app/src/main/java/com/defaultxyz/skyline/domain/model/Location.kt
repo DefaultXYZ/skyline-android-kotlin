@@ -9,7 +9,7 @@ data class Location(
     val name: String,
     val latitude: Double,
     val longitude: Double,
-    val userName: String
+    val userName: String = ""
 ) : Parcelable
 
 fun Location.latLng(): LatLng = LatLng(latitude, longitude)

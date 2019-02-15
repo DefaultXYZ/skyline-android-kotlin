@@ -10,6 +10,10 @@ import com.defaultxyz.skyline.extensions.addMarkers
 import com.defaultxyz.skyline.extensions.provideViewModel
 import com.defaultxyz.skyline.extensions.startActivity
 import com.defaultxyz.skyline.extensions.toggleVisibility
+import com.defaultxyz.skyline.presentation.map.location.add.AddLocationActivity
+import com.defaultxyz.skyline.presentation.map.location.add.NEW_LOCATION_LAT_LNG_KEY
+import com.defaultxyz.skyline.presentation.map.location.details.LOCATION_KEY
+import com.defaultxyz.skyline.presentation.map.location.details.LocationDetailsActivity
 import com.defaultxyz.skyline.utils.BaseActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,7 +30,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityMapBinding>(this, R.layout.activity_map).apply {
             viewModel = this@MapActivity.viewModel
-            setLifecycleOwner(this@MapActivity)
+            lifecycleOwner = this@MapActivity
         }
         lifecycle.addObserver(viewModel)
 
@@ -57,6 +61,8 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                         confirmLocationButton.hide()
                         map?.setOnMapClickListener(null)
                         map?.setOnMapLongClickListener {
+                            viewModel.addLocationLatLng = it
+
                             viewModel.state.postValue(MapState.ADD_PLACE_CONFIRM)
                             map?.clear()
                             map?.addMarker(MarkerOptions().position(it))
@@ -75,7 +81,9 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         confirmLocationButton.setOnClickListener {
-            startActivity<AddLocationActivity>()
+            startActivity<AddLocationActivity>{
+                putExtra(NEW_LOCATION_LAT_LNG_KEY, viewModel.addLocationLatLng)
+            }
         }
     }
 

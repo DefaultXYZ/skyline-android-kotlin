@@ -1,6 +1,7 @@
 package com.defaultxyz.skyline.domain.api
 
 import com.defaultxyz.skyline.domain.model.Location
+import com.defaultxyz.skyline.domain.model.Review
 import com.defaultxyz.skyline.domain.model.User
 import io.reactivex.Observable
 import retrofit2.http.Body
@@ -25,12 +26,12 @@ interface ApiClient {
     @POST("/location/new")
     fun addLocation(
         @Query("email") email: String,
-        @Body location: Location
+        @Body addLocationModel: AddLocationModel
     ): Observable<Response<Location>>
 
     @GET("/review/all")
-    fun getReviews(@Query("name") placeName: String): Observable<Response<List<Any>>>
+    fun getReviews(@Query("name") placeName: String): Observable<Response<List<Review>>>
 
     @POST("/review/new")
-    fun addReview(@Body review: Any): Observable<Response<Any>>
+    fun addReview(@Body review: Review): Observable<Response<Review>>
 }

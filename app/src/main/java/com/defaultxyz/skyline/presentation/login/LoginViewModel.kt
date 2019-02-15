@@ -1,23 +1,18 @@
 package com.defaultxyz.skyline.presentation.login
 
 import android.text.format.DateFormat
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
 import com.defaultxyz.skyline.domain.UserRepository
 import com.defaultxyz.skyline.domain.model.User
 import com.defaultxyz.skyline.extensions.doOnNull
 import com.defaultxyz.skyline.extensions.takeIfNotEmpty
 import com.defaultxyz.skyline.utils.ActionResult
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import com.defaultxyz.skyline.utils.BaseViewModel
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.*
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(
-    private val userRepository: UserRepository
-) : ViewModel(), LifecycleObserver {
-    private val compositeDisposable = CompositeDisposable()
-
+class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : BaseViewModel() {
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val firstName = MutableLiveData<String>()
@@ -38,7 +33,7 @@ class LoginViewModel @Inject constructor(
                         }, onNext = {
                             resultMessage.postValue(it)
                         }
-                    ).addTo(compositeDisposable)
+                    ).toDisposables()
             }.doOnNull {
                 resultMessage.postValue(ActionResult("Enter data before login", LoginState.EMPTY))
             }
@@ -71,14 +66,9 @@ class LoginViewModel @Inject constructor(
                         }, onNext = {
                             resultMessage.postValue(it)
                         }
-                    ).addTo(compositeDisposable)
+                    ).toDisposables()
             }
         }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        compositeDisposable.clear()
     }
 
 }
