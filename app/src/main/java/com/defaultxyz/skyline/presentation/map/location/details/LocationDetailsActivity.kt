@@ -31,11 +31,16 @@ class LocationDetailsActivity : BaseActivity() {
 
         setTitle(R.string.location_details)
 
-        val location = intent.getParcelableExtra<Location>(LOCATION_KEY)
+        intent.getParcelableExtra<Location>(LOCATION_KEY).apply {
+            viewModel.locationCreator.postValue(userName)
+        }
 
         reviewList.adapter = adapter
 
         viewModel.locationReviews.observe(this, Observer {
+            it.sumBy { review -> review.rating }
+                .div(it.size.toFloat())
+                .let { totalRating -> viewModel.placeRating.postValue(totalRating) }
             adapter.data = it.map(::ReviewItem)
         })
     }

@@ -92,6 +92,8 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             }
             viewModel.state.postValue(MapState.LOCATIONS)
         }
+
+        viewModel.state.postValue(MapState.LOCATIONS)
     }
 
     override fun onResume() {

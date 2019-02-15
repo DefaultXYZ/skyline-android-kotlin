@@ -9,6 +9,7 @@ class LocationDetailsViewModel @Inject constructor(): BaseViewModel() {
     val locationCreator = MutableLiveData<String>()
     val locationReviews = MutableLiveData<List<Review>>()
 
+    val placeRating = MutableLiveData<Float>()
     val placeReview = MutableLiveData<String>()
 
     fun onAddReview() {

@@ -19,10 +19,6 @@ class MapViewModel @Inject constructor(
 
     val locations = MutableLiveData<List<Location>>()
 
-    init {
-        state.postValue(MapState.LOCATIONS)
-    }
-
     fun loadLocations() {
         locationRepository.retrieveLocations()
             .subscribeBy(onError = {
