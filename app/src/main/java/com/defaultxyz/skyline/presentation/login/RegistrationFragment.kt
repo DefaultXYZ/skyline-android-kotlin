@@ -23,7 +23,7 @@ class RegistrationFragment : BaseFragment() {
         inflater, R.layout.fragment_registration, container, false
     ).apply {
         viewModel = this@RegistrationFragment.viewModel
-        setLifecycleOwner(this@RegistrationFragment)
+        lifecycleOwner = this@RegistrationFragment
     }.root
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

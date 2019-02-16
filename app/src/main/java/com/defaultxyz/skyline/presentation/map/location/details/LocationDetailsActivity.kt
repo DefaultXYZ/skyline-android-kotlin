@@ -7,6 +7,7 @@ import com.defaultxyz.skyline.R
 import com.defaultxyz.skyline.databinding.ActivityLocationDetailsBinding
 import com.defaultxyz.skyline.domain.model.Location
 import com.defaultxyz.skyline.extensions.provideViewModel
+import com.defaultxyz.skyline.extensions.showToast
 import com.defaultxyz.skyline.presentation.map.adapter.ReviewAdapter
 import com.defaultxyz.skyline.presentation.map.adapter.ReviewItem
 import com.defaultxyz.skyline.utils.BaseActivity
@@ -33,16 +34,21 @@ class LocationDetailsActivity : BaseActivity() {
 
         intent.getParcelableExtra<Location>(LOCATION_KEY).apply {
             viewModel.locationCreator.postValue(userName)
-            viewModel.loadReviews(this)
+            viewModel.location = this
         }
 
         reviewList.adapter = adapter
 
+        viewModel.loadReviews()
         viewModel.locationReviews.observe(this, Observer {
             it.sumBy { review -> review.rating }
                 .div(it.size.toFloat())
                 .let { totalRating -> viewModel.placeRating.postValue(totalRating) }
             adapter.data = it.map(::ReviewItem)
+        })
+
+        viewModel.messageHandler.observe(this, Observer {
+            showToast(it)
         })
     }
 }

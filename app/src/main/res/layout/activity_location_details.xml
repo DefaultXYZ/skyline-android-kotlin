@@ -73,9 +73,30 @@
             android:layout_margin="8dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/addReviewButton"
+            app:layout_constraintBottom_toTopOf="@id/reviewRating"
             app:layout_constraintTop_toBottomOf="@id/totalRatingBar"
             tools:listitem="@layout/layout_review_item" />
+
+        <TextView
+            android:id="@+id/reviewRatingLabel"
+            style="@style/AppText.Large.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_rating"
+            app:layout_constraintBottom_toBottomOf="@id/reviewRating"
+            app:layout_constraintEnd_toStartOf="@id/reviewRating"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/reviewRating" />
+
+        <RatingBar
+            android:id="@+id/reviewRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:rating="@={ viewModel.placeReviewRating }"
+            android:stepSize="1"
+            app:layout_constraintBottom_toTopOf="@id/reviewField"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <EditText
             android:id="@+id/reviewField"

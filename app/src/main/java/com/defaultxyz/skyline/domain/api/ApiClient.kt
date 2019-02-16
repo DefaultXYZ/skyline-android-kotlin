@@ -33,5 +33,5 @@ interface ApiClient {
     fun getReviews(@Query("name") placeName: String): Observable<Response<List<Review>>>
 
     @POST("/review/new")
-    fun addReview(@Body review: Review): Observable<Response<Review>>
+    fun addReview(@Body review: AddReviewModel): Observable<Response<AddReviewModel>>
 }
