@@ -13,10 +13,3 @@ data class LocationEntity(
     val longitude: Double,
     @ColumnInfo(name = "email") val userEmail: String
 )
-
-fun Location.toEntity() = LocationEntity(
-    name = name,
-    latitude = latitude,
-    longitude = longitude,
-    userEmail = userName
-)
